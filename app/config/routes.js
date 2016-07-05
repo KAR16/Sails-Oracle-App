@@ -46,6 +46,12 @@ module.exports.routes = {
   },
   '/user/list':{
     controller:'UserController', action: 'listUsers'
+  },
+  '/user/table_user':{
+    view: 'user/tableUser'
+  },
+  '/user/show':{
+    view:'user/show'
   }
 
   /***************************************************************************
