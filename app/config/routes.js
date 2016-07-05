@@ -33,7 +33,19 @@ module.exports.routes = {
   ***************************************************************************/
 
   '/': {
-    view: 'homepage'
+    view: 'home'
+  },
+  '/view':{
+    view: 'view'
+  },
+  '/user/singin':{
+    view: 'user/singin'
+  },
+  '/user':{
+    controller:'UserController', action: 'vista'
+  },
+  '/user/list':{
+    controller:'UserController', action: 'listUsers'
   }
 
   /***************************************************************************
