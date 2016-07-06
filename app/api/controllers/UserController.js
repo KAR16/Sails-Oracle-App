@@ -132,45 +132,67 @@ module.exports = {
 	        data = data[0]; //Le damos el valor a la data
 			res.view({data}); //Enviamos la data
 		});
-	}/*, 
+	}, 
  	edit:function(req, res, next){
-		User.findOne(req.param('id'), function userFounded(err, user){
-			if (err){
-				return next(err);
-			}
-			if (!user){
-				return next();
-			}
-			console.log(user);
-			res.view({
-				user:user
-			});
+		oracleService.Query(
+	      "SELECT * FROM RegistredUsers " +
+	      "WHERE ID = "+ req.param('id') +"",
+	      	function(err, result){
+	        if (err) { 
+	        	console.error(err.message); 
+	        	return; 
+	        }
+	        var data = [];
+	        console.log('Todos los rows:', result.rows);
+	        for (var i = 0; i < (result.rows).length; i++ ){
+	        	//Parseamos los datos y los insertamos en el array data
+	        	data.push({
+	        		"id": result.rows[i][0],
+	        		"name": result.rows[i][1], 
+	        		"lastName": result.rows[i][2], 
+	        		"userName": result.rows[i][3], 
+	        		"email": result.rows[i][4], 
+	        		"createdUser": result.rows[i][5], 
+	        		"updatedUser": result.rows[i][6]
+	        	});
+	        };
+	    	 data = data[0]; //Le damos el valor a la data
+			res.view({data}); //Enviamos la data
 		});
+
 	}, 
 
 	update:function(req, res, next){
 		console.log('Update');
 
 		var userObj = {
+			id: req.param('id'),
 			name: req.param('name'),
 			lastname: req.param('lastname'),
 			username: req.param('username'),
 			email: req.param('email')
 		}
 
-		console.log(userObj);
-		User.update(req.param('id'), userObj, function userUpdated(err, user){
-		if (err){
-			console.log(err);
-			req.session.flash={
-				err:err
-			}
-			return res.redirect('user/' + req.param('id'));
-		}
+		var consulta = ("BEGIN\n"+ 
+						"UPDATE REGISTREDUSERS\n"+
+						"SET NAME = \'" + userObj.name + "\', LASTNAME = \'"+ userObj.lastname +"\', USERNAME = \'"+ userObj.username +"\', EMAIL = \'"+ userObj.email +"\', UPDATEDUSER = SYSDATE\n"+
+						"WHERE ID = "+ req.param('id') +";\n"+
+						"COMMIT;\n"+
+						"END;");
 
-		res.redirect('user/table_user');
+		console.log(consulta);
+
+		oracleService.Query(
+	      consulta,
+	       // "FROM RegistredUsers ",
+	      	function(err, result){
+	        if (err) { 
+	        	console.error(err.message); 
+	        	return; 
+	        }
+	        res.redirect('user/show/' + userObj.id);
 		});
-	},
+	}/*,
 
 	delete:function(req, res, next){
 		User.destroy(req.param('id'), function userDestroyed(err, user){

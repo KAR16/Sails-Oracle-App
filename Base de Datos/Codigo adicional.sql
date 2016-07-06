@@ -1,7 +1,12 @@
 /* INSERTAR DATOS */
 
 INSERT INTO REGISTREDUSERS
-VALUES (1, 'Kevin', 'Herrera', 'Kevin16', 'kherrera16@gmail.com ', SYSDATE, SYSDATE);
+VALUES (UserId.NEXTVAL, 'Kevin', 'Herrera', 'Kevin16', 'kherrera16@gmail.com', SYSDATE, SYSDATE);
+
+INSERT INTO REGISTREDUSERS
+VALUES (UserId.NEXTVAL, 'Roberto', 'Cardenas', 'Beto', 'bcardenas@gmail.com', SYSDATE, SYSDATE);
+
+
 COMMIT;
 
 
@@ -14,3 +19,7 @@ DROP TABLE REGISTREDUSERS;
 
 /* SELECCIONAR DATA */
 SELECT * FROM REGISTREDUSERS;
+
+--Cración de Secuencias
+CREATE SEQUENCE UserId;
+COMMIT;

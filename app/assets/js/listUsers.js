@@ -4,7 +4,6 @@ $(document).ready(function() {
 
 	function displaylist(parse_user, i){
 		$(".display").append("<tr> "+ 
-								"<td class =\"id\"> "+ parse_user[i].id +"</td>"+
 								"<td class =\"name\"> "+ parse_user[i].name +"</td>"+
 								"<td class =\"lastname\">" +parse_user[i].lastName +"</td>"+
 								"<td class =\"username\"> "+ parse_user[i].userName +"</td>"+
