@@ -1,17 +1,17 @@
 <div class="container">
 	<h2> Users Information </h2>
 	<ul>
-		<li><%= user.name %></li>
-		<li><%= user.lastname %></li>
-		<li><%= user.username %></li>
-		<li><%= user.email %></li>
+		<li><%= data.name %></li>
+		<li><%= data.lastName %></li>
+		<li><%= data.userName %></li>
+		<li><%= data.email %></li>
 	</ul>
 
 	<br>
 	<table>
 		<tr>
 			<td>
-				<form action="/user/edit/<%= user.id %>" method="POST" accept-charset="utf-8">
+				<form action="/user/edit/<%= data.id %>" method="POST" accept-charset="utf-8">
 					<button class="btn btn-primary" type="submit">Edit</button>
 				</form>
 			</td>

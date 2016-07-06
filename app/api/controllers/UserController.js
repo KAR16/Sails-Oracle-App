@@ -20,12 +20,9 @@ module.exports = {
 	        //console.log(result);
 	        //console.log('Todos los rows:', result.rows);
 	        //console.log('Row en especifico: ', result.rows[0]);
-	        console.log('Dato en especifico: ', result.rows[0][0]);
-	        console.log('Numero de ITEMS: ', (result.rows).length);
+	        console.log('Users / Numero de ITEMS: ', (result.rows).length);
 	        for (var i = 0; i < (result.rows).length; i++ ){
-	        	var id = result.rows[i][0];
 
-	        	console.log(id);
 	        	data.push({
 	        		"id": result.rows[i][0],
 	        		"name": result.rows[i][1], 
@@ -53,12 +50,9 @@ module.exports = {
 	        //console.log(result);
 	        //console.log('Todos los rows:', result.rows);
 	        //console.log('Row en especifico: ', result.rows[0]);
-	        console.log('Dato en especifico: ', result.rows[0][0]);
-	        console.log('Numero de ITEMS: ', (result.rows).length);
+	        console.log('ListUsers / Numero de ITEMS: ', (result.rows).length);
 	        for (var i = 0; i < (result.rows).length; i++ ){
-	        	var id = result.rows[i][0];
 
-	        	console.log(id);
 	        	data.push({
 	        		"id": result.rows[i][0],
 	        		"name": result.rows[i][1], 
@@ -100,7 +94,7 @@ module.exports = {
 	        	console.error(err.message); 
 	        	return; 
 	        }
-	        res.redirect('user/table_user');
+	        res.redirect('user/show/' + userObj.id);
 		});
 
 
@@ -110,8 +104,34 @@ module.exports = {
 	},
 	show:function(req, res, next){
 
-			console.log(user);
-			res.view({user});
+		oracleService.Query(
+	      "SELECT * FROM RegistredUsers " +
+	      "WHERE ID = "+ req.param('id') +"",
+	      	function(err, result){
+	        if (err) { 
+	        	console.error(err.message); 
+	        	return; 
+	        }
+	        var data = [];
+	        console.log('Todos los rows:', result.rows);
+	        for (var i = 0; i < (result.rows).length; i++ ){
+	        	//Parseamos los datos y los insertamos en el array data
+	        	data.push({
+	        		"id": result.rows[i][0],
+	        		"name": result.rows[i][1], 
+	        		"lastName": result.rows[i][2], 
+	        		"userName": result.rows[i][3], 
+	        		"email": result.rows[i][4], 
+	        		"createdUser": result.rows[i][5], 
+	        		"updatedUser": result.rows[i][6]
+	        	});
+	        };
+
+	        //Aqui mostramos la data final
+	        console.log('Data de Show', data[0]);
+	        data = data[0]; //Le damos el valor a la data
+			res.view({data}); //Enviamos la data
+		});
 	}/*, 
  	edit:function(req, res, next){
 		User.findOne(req.param('id'), function userFounded(err, user){
