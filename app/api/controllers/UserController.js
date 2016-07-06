@@ -9,7 +9,8 @@ module.exports = {
 
 	vista: function(req, res){
 	    oracleService.Query(
-	      "SELECT * FROM RegistredUsers ",
+	      "SELECT * FROM RegistredUsers " +
+	      "ORDER BY ID",
 	       // "FROM RegistredUsers ",
 	      	function(err, result){
 	        if (err) { 
@@ -39,7 +40,8 @@ module.exports = {
 	},
 	listUsers: function(req, res){
 		oracleService.Query(
-	      "SELECT * FROM RegistredUsers ",
+	      "SELECT * FROM RegistredUsers " +
+	      "ORDER BY ID",
 	       // "FROM RegistredUsers ",
 	      	function(err, result){
 	        if (err) { 
@@ -71,16 +73,17 @@ module.exports = {
 		console.log('Inserté');
 
 		var userObj = {
-			id: req.param('id'),
 			name: req.param('name'),
 			lastname: req.param('lastname'),
 			username: req.param('username'),
 			email: req.param('email')
 		}
 
+		console.log(userObj);
+
 		var consulta = ("BEGIN\n"+ 
 						"INSERT INTO REGISTREDUSERS\n"+
-						"VALUES ("+ userObj.id +", \'" + userObj.name + "\', \'"+ userObj.lastname +"\', \'"+ userObj.username +"\', \'"+ userObj.email +"\', SYSDATE, SYSDATE);\n"+
+						"VALUES (UserId.NEXTVAL,\'" + userObj.name + "\', \'"+ userObj.lastname +"\', \'"+ userObj.username +"\', \'"+ userObj.email +"\', SYSDATE, SYSDATE);\n"+
 						"COMMIT;\n"+
 						"END;");
 
@@ -94,7 +97,8 @@ module.exports = {
 	        	console.error(err.message); 
 	        	return; 
 	        }
-	        res.redirect('user/show/' + userObj.id);
+	        console.log(result);
+	        res.redirect('user/table_user');
 		});
 
 
@@ -104,9 +108,12 @@ module.exports = {
 	},
 	show:function(req, res, next){
 
+		var consulta = "SELECT * FROM RegistredUsers " +
+	      "WHERE ID = "+ req.param('id') +"";
+
+	    console.log(consulta);
 		oracleService.Query(
-	      "SELECT * FROM RegistredUsers " +
-	      "WHERE ID = "+ req.param('id') +"",
+	      consulta,
 	      	function(err, result){
 	        if (err) { 
 	        	console.error(err.message); 
@@ -192,17 +199,25 @@ module.exports = {
 	        }
 	        res.redirect('user/show/' + userObj.id);
 		});
-	}/*,
+	},
 
 	delete:function(req, res, next){
-		User.destroy(req.param('id'), function userDestroyed(err, user){
-			console.log('Delete');
-			if (err){
-				console.log(err);
-				return next(err);
-			}
+		console.log('Delete:');
+
+		var consulta = "BEGIN\n" +
+	      	"DELETE FROM RegistredUsers \n" +
+	      	"WHERE ID = "+ req.param('id') +";\n" +
+	      	"COMMIT;\n" +
+		  	"END;";
+		console.log(consulta);
+		oracleService.Query(consulta,
+	      	function(err, result){
+	        if (err) { 
+	        	console.error(err.message); 
+	        	return; 
+	        }
 			res.redirect('user/table_user');
 		});
-	}*/
+	}
 };
 

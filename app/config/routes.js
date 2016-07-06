@@ -50,8 +50,8 @@ module.exports.routes = {
   '/user/table_user':{
     view: 'user/tableUser'
   },
-  '/user/show':{
-    view:'user/show'
+  '/user/show/':{
+    controller:'UserController', action: 'show'
   }
 
   /***************************************************************************
